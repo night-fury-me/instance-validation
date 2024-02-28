@@ -10,9 +10,7 @@ const ValidationErrorMessages = new Map<ValidationType | string, Function>([
 	[
 		ValidationType.MinLength,
 		({ propertyName, minLength }: ValidationArgument) => {
-			console.log(
-				`PropertyName: ${propertyName}  || minLength: ${minLength}`
-			);
+			console.log(`PropertyName: ${propertyName}  || minLength: ${minLength}`);
 
 			return `Property[${propertyName}] requires a minimum length of ${minLength}.`;
 		},

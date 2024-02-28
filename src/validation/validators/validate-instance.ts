@@ -28,15 +28,16 @@ function _executeAggregatedValidation(
 	target: any,
 	validators: [Function, any][]
 ): [boolean, Array<string>] {
-	const aggregatedValidationState = validators.reduce<
-		[boolean, Array<string>]
-	>(
+	const aggregatedValidationState = validators.reduce<[boolean, Array<string>]>(
 		(
 			[prevValidationStatus, prevErrorMessages],
 			[validator, args]
 		): [boolean, Array<string>] => {
-			const [currValidationStatus, currErrorMessage] =
-				_executeSingleValidation(target, validator, args);
+			const [currValidationStatus, currErrorMessage] = _executeSingleValidation(
+				target,
+				validator,
+				args
+			);
 
 			const filteredErrorMessages: Array<string> = (
 				currErrorMessage == undefined
@@ -75,8 +76,7 @@ export function ValidateInstance<
 				([prevValidationStatus, prevErrorMessages], propValidators) => {
 					const [currValidationStatus, currErrorMesssages] =
 						_executeAggregatedValidation(this, propValidators);
-					const isValid =
-						prevValidationStatus && currValidationStatus;
+					const isValid = prevValidationStatus && currValidationStatus;
 					let aggreegatedErrorMessage = [
 						...prevErrorMessages,
 						...currErrorMesssages,
