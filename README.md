@@ -56,6 +56,56 @@ This method attempts to create an instance of `Person` with the provided argumen
 - `instance`: The created instance of the class or `undefined` if validation fails.
 - `status`: An object detailing the validation results, including any errors.
 
+
+## Creating Custom Validators with the Instance Validation Library
+
+The Instance Validation Library not only offers a set of built-in validators but also allows users to create their own custom validators. This flexibility enables developers to define validation logic that fits their specific needs. Below is a guide on how to create and use custom validators within your TypeScript projects.
+
+### Custom Validator Example: EmailFormat
+
+To illustrate how to create a custom validator, we'll go through the process of defining an `EmailFormat` validator. This validator checks if a given string is a valid email address.
+
+### Step 1: Define the Custom Validator
+
+First, you need to import the `ValidationFactory` from the library and use it to create your custom validator. The `ValidationFactory` function takes two arguments: a validation function and an object containing the validator's type and an error message.
+
+```typescript
+import { ValidationFactory } from "../factory";
+
+export const EmailFormat = (() =>
+    ValidationFactory(
+        ({ propertyValue }: any) => {
+            const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+            return regex.test(propertyValue as string);
+        },
+        {
+            type: "EmailFormat",
+            errorMessage: "It's not a valid email address.",
+        }
+    ))();
+```
+
+In this example, the validation function checks if `propertyValue` matches the specified regular expression pattern for email addresses. If the value is a valid email, the function returns `true`; otherwise, it returns `false`.
+
+### Step 2: Use the Custom Validator in Your Class
+
+After defining the custom validator, you can use it in the same way as the built-in validators by applying it as a decorator to class properties.
+
+```typescript
+import { ValidateInstance } from "./validation/validators/validate-instance";
+import { EmailFormat } from "./validation/validators/email-format"; // Assuming the custom validator is exported here
+
+@ValidateInstance
+class User {
+    @EmailFormat
+    email: string;
+
+    constructor(email: string) {
+        this.email = email;
+    }
+}
+```
+
 ## Conclusion
 
 The Instance Validation Library offers a declarative and intuitive approach to enforcing validation rules on class instances. By following the examples provided, you can integrate robust validation logic into your TypeScript applications with minimal effort.
